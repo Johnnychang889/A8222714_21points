@@ -1,3 +1,5 @@
 A8222714_21點
-====================
-![image](http://h1designgroup.com/wp-content/uploads/Why-should-you-choose-to-play-Blackjack-online-1080x675.jpg)
+###
+待修正的問題:
+  1. 可能出現同點數的牌>4張的情況
+  2. A只能視為1點,不能視為11點(我目前的想法:若總點數>21點,則把A視為1點,否則視為11點)
