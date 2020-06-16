@@ -1,16 +1,15 @@
-  
 #include<iostream>
 #include<cstdlib>
 #include<ctime>
 #include<string>
 using namespace std;
 
-//©âµP¨ç¦¡ 
+//æŠ½ç‰Œå‡½å¼ 
 int draw() {
 	return rand() % 13+1;
 }
 
-//ºâÂI¼Æ¨ç¦¡ 
+//ç®—é»žæ•¸å‡½å¼ 
 int getCardPoint(int card) {
 	switch (card)
 	{
@@ -25,7 +24,7 @@ int getCardPoint(int card) {
 	}
 }
 
-//ÂI¼ÆÂà¹ïÀ³µP¦W¨ç¦¡ 
+//é»žæ•¸è½‰å°æ‡‰ç‰Œåå‡½å¼ 
 string cardName(int point) {
 	if (point == 1) return "A"; 
 	else if (point == 2) return "2";
@@ -42,109 +41,116 @@ string cardName(int point) {
 	else if (point == 13) return "K";
 }
 
-//µô§P¨ç¦¡¤@ (¦³µLÃz±¼)
-bool judge1(int yourPoint, int computerPoint) {
+//åˆ¤æ–·æœ‰ç„¡çˆ†æŽ‰å‡½å¼
+bool judge(int yourPoint, int computerPoint) {
 	if (yourPoint > 21) {
-		cout << "§AªºÂI¼Æ¶W¹L21ÂI,§A¿é¤F!" << endl;
+		cout << "ä½ çš„é»žæ•¸è¶…éŽ21é»ž,ä½ è¼¸äº†!" << endl;
 		return true;
 
 	}
 	else if (computerPoint > 21) {
-		cout<<"¹ï¤âªºÁ`ÂI¼Æ¬°: "<< computerPoint<<endl;
-		cout << "¹ï¤âªºÂI¼Æ¶W¹L21ÂI,§AÄ¹¤F!" << endl;
+		cout<<"å°æ‰‹çš„ç¸½é»žæ•¸ç‚º: "<< computerPoint<<endl;
+		cout << "å°æ‰‹çš„é»žæ•¸è¶…éŽ21é»ž,ä½ è´äº†!" << endl;
 		return true;
 	}
 	else return false;
 }
 
-//µô§P¨ç¦¡¤G (¤ñ¤j¤p)
-bool judge2(int yourPoint, int computerPoint) {
+//æ¯”å¤§å°å‡½å¼
+void battle(int yourPoint, int computerPoint) {
 	if (computerPoint == yourPoint) {
-	cout<<"§AªºÂI¼Æ¬°: "<<yourPoint<<endl; 
-	cout<<"¹ï¤âªºÂI¼Æ¬°: "<<computerPoint<<endl; 
-	cout << "¥­¤â!" << endl;
-	return true;
+	cout<<"ä½ çš„é»žæ•¸ç‚º: "<<yourPoint<<endl; 
+	cout<<"å°æ‰‹çš„é»žæ•¸ç‚º: "<<computerPoint<<endl; 
+	cout << "å¹³æ‰‹!" << endl;
 	}
 	else if (yourPoint > computerPoint) {
-	cout<<"§AªºÂI¼Æ¬°: "<<yourPoint<<endl; 
-	cout<<"¹ï¤âªºÂI¼Æ¬°: "<<computerPoint<<endl; 
-	cout << "§AÄ¹¤F!" << endl;
-	return true;
+	cout<<"ä½ çš„é»žæ•¸ç‚º: "<<yourPoint<<endl; 
+	cout<<"å°æ‰‹çš„é»žæ•¸ç‚º: "<<computerPoint<<endl; 
+	cout << "ä½ è´äº†!" << endl;
 	}
 	else if (yourPoint < computerPoint) {
-	cout<<"§AªºÂI¼Æ¬°: "<<yourPoint<<endl; 
-	cout<<"¹ï¤âªºÂI¼Æ¬°: "<<computerPoint<<endl; 
-	cout << "§A¿é¤F!" << endl;
-	return true;
+	cout<<"ä½ çš„é»žæ•¸ç‚º: "<<yourPoint<<endl; 
+	cout<<"å°æ‰‹çš„é»žæ•¸ç‚º: "<<computerPoint<<endl; 
+	cout << "ä½ è¼¸äº†!" << endl;
 	}
-	else return false;
+
 }
 
-//¨M©w¹ï¤â¬O§_©âµP¨ç¦¡ 
-bool computerDraw(int computerPoint){
-	if(computerPoint<17){
-		return true;
+//æ±ºå®šå°æ‰‹æ˜¯å¦æŠ½ç‰Œå‡½å¼ 
+bool computerDraw(int computerPoint,int ans){
+	if(ans==1){
+		if(computerPoint<17) return true;
+		else if(computerPoint==21) return false;
+		else return (rand()%2)?true:false;
 	}
-	else return (rand()%2)?true:false;
+	else if(ans==0) return false;
 } 
 
-//¥D¨ç¦¡
+//ä¸»å‡½å¼
 int main() {
 	srand(time(0));
-	char answer;//©âµP»P§_ 
-	int yourPoint;//§AªºÂI¼Æ 
-	int computerPoint;//¹ï¤âªºÂI¼Æ 
-	int your[5] , computer[5];
+	char answer;//çŽ©å®¶æŠ½ç‰Œèˆ‡å¦
+	int computerAnswer=1;//å°æ‰‹æŠ½ç‰Œèˆ‡å¦
+	int yourPoint;//ä½ çš„é»žæ•¸ 
+	int computerPoint;//å°æ‰‹çš„é»žæ•¸ 
+	int your[10];//ä½ çš„ç‰Œ 
+	int computer[10];//å°æ‰‹çš„ç‰Œ 
 
+	//ç¬¬ä¸€å±€ 
 	computer[0] = draw();
 	computerPoint = getCardPoint(computer[0]);
 	your[0] = draw();
 	yourPoint = getCardPoint(your[0]);
-	cout << "§Aªº©³µP :" << cardName(your[0]) << endl;
+	cout << "ä½ çš„åº•ç‰Œ :" << cardName(your[0]) << endl;
 	cout << "======================================" << endl;
+	//ç¬¬äºŒå±€ 
 	computer[1] = draw();
 	computerPoint += getCardPoint(computer[1]);
-	cout << "¹ï¤â©â¨ì :" << cardName(computer[1]) << endl;
+	cout << "å°æ‰‹æŠ½åˆ° :" << cardName(computer[1]) << endl;
 	your[1] = draw();
 	yourPoint += getCardPoint(your[1]);
-	cout << "§A©â¨ì :" << cardName(your[1]) << "    §A¥Ø«eªºÂI¼Æ¦@¬° :" << yourPoint <<endl;
-	cout << "======================================" << endl;
+	cout << "ä½ æŠ½åˆ° :" << cardName(your[1]) << "    ä½ ç›®å‰çš„é»žæ•¸å…±ç‚º :" << yourPoint <<endl;
+	
 
-
-	for (int j = 2; j < 5; j++) {
-		cout << "§A­n©âµP¶Ü?(¿é¤Jy©În)" << endl;
+	//ç¬¬ä¸‰å±€ä¹‹å¾Œ 
+	for (int j = 2; j < 10; j++) {
+		cout << "======================================" << endl;
+		cout << "ä½ è¦æŠ½ç‰Œå—Ž?(è¼¸å…¥yæˆ–n)" << endl;
 		cin >> answer;
 		if (answer == 'y') {
 			your[j] = draw();
 			yourPoint += getCardPoint(your[j]);
-			cout << "§A©â¨ì: " << cardName(your[j]) << "    §A¥Ø«eªºÂI¼Æ¦@¬°: " << yourPoint << endl;
-			if (judge1(yourPoint, computerPoint)) { break; };
-			if(computerDraw(computerPoint)){
+			cout << "ä½ æŠ½åˆ°: " << cardName(your[j]) << "    ä½ ç›®å‰çš„é»žæ•¸å…±ç‚º: " << yourPoint << endl;
+			if (judge(yourPoint, computerPoint)) { break; };
+			if(computerDraw(computerPoint,computerAnswer)){
 				computer[j] = draw();
 				computerPoint += getCardPoint(computer[j]);
-				cout << "¹ï¤â©â¨ì: " << cardName(computer[j]) << endl;
-				if (judge1(yourPoint, computerPoint)) { break; };
+				cout << "å°æ‰‹æŠ½åˆ°: " << cardName(computer[j]) << endl;
+				if (judge(yourPoint, computerPoint)) { break; };
 			}
-			else cout<<"¹ï¤â¤£·Q©âµP"<<endl;
-			if (judge1(yourPoint, computerPoint)) { break; };
+			else{
+				cout<<"å°æ‰‹ä¸æƒ³æŠ½ç‰Œ"<<endl;
+				computerAnswer=0;
+			}
+			if (judge(yourPoint, computerPoint)) { break; };
 		}
 		else if (answer == 'n') {
 			cout << "======================================" << endl;
-			if(computerDraw(computerPoint)){
+			if(computerDraw(computerPoint,computerAnswer)){
 				computer[j] = draw();
 				computerPoint += getCardPoint(computer[j]);
-				cout << "¹ï¤â©â¨ì: " << cardName(computer[j]) << endl;
-				if (judge1(yourPoint, computerPoint)) { break; };
+				cout << "å°æ‰‹æŠ½åˆ°: " << cardName(computer[j]) << endl;
+				if (judge(yourPoint, computerPoint)) { break; };
 			}
 			else {
-				cout<<"¹ï¤â¤£·Q©âµP"<<endl;
-				if (judge2(yourPoint, computerPoint)) { break; };
+				cout<<"å°æ‰‹ä¸æƒ³æŠ½ç‰Œ"<<endl;
+				battle(yourPoint, computerPoint);
+				break;
 			}
-			
 		}
 		else{
-			cout<<"½Ð¿é¤Jy©În,¤£­n¶Ã¥´! "<<endl;
-			j=2;
+			cout<<"è«‹è¼¸å…¥yæˆ–n,ä¸è¦äº‚æ‰“! "<<endl;
+			j--;
 		}
 	}
 	
